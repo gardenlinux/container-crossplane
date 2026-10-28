@@ -30,6 +30,7 @@ jobs:
         run: |
           VERSION="${VERSION#release/v}"
           VERSION="${VERSION#release/}"
+          [[ "$VERSION" =~ ^[0-9] ]] || VERSION=$(grep -m1 'VERSION:-' build-crossplane-fips.sh | grep -oP '(?<=VERSION:-)[^}]+')
           bash build-crossplane-fips.sh
           docker push ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-amd64
 
@@ -50,6 +51,7 @@ jobs:
         run: |
           VERSION="${VERSION#release/v}"
           VERSION="${VERSION#release/}"
+          [[ "$VERSION" =~ ^[0-9] ]] || VERSION=$(grep -m1 'VERSION:-' build-crossplane-fips.sh | grep -oP '(?<=VERSION:-)[^}]+')
           bash build-crossplane-fips.sh
           docker push ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-arm64
 
@@ -68,6 +70,7 @@ jobs:
         run: |
           VERSION="${VERSION#release/v}"
           VERSION="${VERSION#release/}"
+          [[ "$VERSION" =~ ^[0-9] ]] || VERSION=$(grep -m1 'VERSION:-' build-crossplane-fips.sh | grep -oP '(?<=VERSION:-)[^}]+')
           docker manifest create \
             ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION} \
             ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-amd64 \
