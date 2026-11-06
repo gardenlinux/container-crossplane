@@ -8,9 +8,9 @@ BASE_IMAGE="${BASE_IMAGE:-ghcr.io/gardenlinux/gardenlinux/fips:1877.22}"
 WORKDIR="${WORKDIR:-./.build/crossplane-fips-build}"
 IMAGE_NAME="${IMAGE_NAME:-gl-fips-crossplane}"
 ARCH="${ARCH:-$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')}"
-VERSION="${VERSION:-2.4.2}"
+VERSION="${VERSION:-2.4.3}"
 UPSTREAM_GIT_SHA="${UPSTREAM_GIT_SHA:-bf8ffd4048a0bb1b408b8b745e31960c717009cb}"
-GO_IMAGE="${GO_IMAGE:-golang:1.26.7-bookworm}"
+GO_IMAGE="${GO_IMAGE:-golang:1.26.10-bookworm}"
 
 # --- prerequisites -----------------------------------------------------------
 
@@ -40,7 +40,7 @@ git -C "${CLONE_DIR}" checkout "v${VERSION}"
 # --- generate Dockerfile.fips ------------------------------------------------
 
 cat > "${WORKDIR}/Dockerfile.fips" <<'EOF'
-ARG GO_IMAGE=golang:1.26.7-bookworm
+ARG GO_IMAGE=golang:1.26.10-bookworm
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
 ARG TARGETARCH
 ARG VERSION
@@ -93,7 +93,7 @@ echo "Built: ${IMAGE_NAME}:${VERSION}-${ARCH}"
 
 # --- SBOM --------------------------------------------------------------------
 # Syft version is pinned; update SYFT_VERSION to pick up a newer release.
-SYFT_VERSION="${SYFT_VERSION:-1.56.0}"
+SYFT_VERSION="${SYFT_VERSION:-2.4.3}"
 SYFT_BIN="${WORKDIR}/syft"
 
 install_syft() {
