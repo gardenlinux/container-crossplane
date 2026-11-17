@@ -2,7 +2,7 @@ name: Check upstream Crossplane release
 
 on:
   schedule:
-    - cron: '17 6 * * *'
+    - cron: '15 2 * * *'
   workflow_dispatch:
     inputs:
       upstream_repo:
