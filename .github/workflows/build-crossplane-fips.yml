@@ -59,8 +59,10 @@ jobs:
           VERSION="${VERSION:-$(grep -m1 'VERSION:-' build-crossplane-fips.sh | grep -oP '(?<=VERSION:-)[^}]+')}"
           bash build-crossplane-fips.sh
           docker push ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-amd64
+          sleep 3
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' \
             ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-amd64 | cut -d@ -f2)
+          [ -n "${DIGEST}" ] || { echo "Failed to retrieve image digest"; exit 1; }
           echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
 
       - name: Upload SBOM artifact
@@ -109,8 +111,10 @@ jobs:
           VERSION="${VERSION:-$(grep -m1 'VERSION:-' build-crossplane-fips.sh | grep -oP '(?<=VERSION:-)[^}]+')}"
           bash build-crossplane-fips.sh
           docker push ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-arm64
+          sleep 3
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' \
             ghcr.io/${{ github.repository_owner }}/gl-fips-crossplane:${VERSION}-arm64 | cut -d@ -f2)
+          [ -n "${DIGEST}" ] || { echo "Failed to retrieve image digest"; exit 1; }
           echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
 
       - name: Upload SBOM artifact
